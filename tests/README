@@ -1,0 +1,17 @@
+instructions to build test:
+
+mkdir build
+cd build
+cmake ..
+cmake --build .
+
+if it failed to build for you, you probably forgot to clone the catch2 repo.
+make sure that you're inside tests/, and run the following command to fix the issue:
+
+git clone --depth 1 -b v2.x https://github.com/catchorg/Catch2
+
+Then you can run the build instructions
+
+
+A test is needed for every new module added to the project.
+Test-driven development is highly recommended.

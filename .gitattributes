@@ -1,0 +1,8 @@
+*   text eol=lf working-tree-encoding=UTF-8
+# .clang-format       text eol=lf working-tree-encoding=UTF-8
+
+*.cpp   text diff=cpp
+*.hpp   text diff=cpp
+
+*.exe   binary
+*.out   binary
