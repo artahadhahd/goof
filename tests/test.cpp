@@ -2,7 +2,7 @@
 #include "../parser/parser.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-static std::string test_string = "# Hello! Here's a comment\nproc fib(n) {fib(n);}";
+static std::string test_string = "# Hello! Here's a comment\nfunction fib(n) {fib(n);}";
 
 TEST_CASE("Lexer divides correctly", "[lexer]") {
     Lexer lexer(test_string);
@@ -13,7 +13,7 @@ TEST_CASE("Lexer divides correctly", "[lexer]") {
     }
 
     SECTION ("Tokens have the correct type") {
-        REQUIRE (all_tokens[0].tokentype == Token::Type::Proc);
+        REQUIRE (all_tokens[0].tokentype == Token::Type::Function);
         REQUIRE (all_tokens[1].tokentype == Token::Type::Identifier);
         REQUIRE (all_tokens[2].tokentype == Token::Type::Operator);
         REQUIRE (all_tokens[3].tokentype == Token::Type::Identifier);
@@ -23,7 +23,7 @@ TEST_CASE("Lexer divides correctly", "[lexer]") {
     }
 
     SECTION ("Tokens have the correct lexeme") {
-        REQUIRE (all_tokens[0].lexeme == "proc");
+        REQUIRE (all_tokens[0].lexeme == "function");
         REQUIRE (all_tokens[10].lexeme == ";");
         REQUIRE (all_tokens[11].lexeme == "}");
     }

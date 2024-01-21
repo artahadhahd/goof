@@ -1,6 +1,6 @@
 #include "lexer.hpp"
 
-Lexer::Lexer(std::string &input_) : input(input_), buffer_size(input.size()) {}
+Lexer::Lexer(std::string &input) : input(input), buffer_size(input.size()) {}
 
 Token Lexer::next() {
     if (!has_next()) {
@@ -101,8 +101,8 @@ Token Lexer::next() {
             return Token{lexeme, line, cursor, Token::Type::If};
         if (lexeme == "else")
             return Token{lexeme, line, cursor, Token::Type::Else};
-        if (lexeme == "proc")
-            return Token{lexeme, line, cursor, Token::Type::Proc};
+        if (lexeme == "function")
+            return Token{lexeme, line, cursor, Token::Type::Function};
         return Token{lexeme, line, cursor, Token::Type::Identifier};
     }
     if (isdigit(input[cursor])) {

@@ -25,7 +25,7 @@ struct Token {
         For,
         While,
         Struct,
-        Proc
+        Function
     } tokentype;
 };
 
@@ -34,8 +34,11 @@ class Lexer {
     std::size_t cursor = 0, line = 1, buffer_size;
 
   public:
-    explicit Lexer(std::string &input_);
+    explicit Lexer(std::string &input);
+
+    /// @brief lazily consume a token from buffer
     Token next();
+    /// @brief strictly consume all tokens
     std::vector<Token> get_all_tokens();
 
   private:
