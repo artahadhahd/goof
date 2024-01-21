@@ -5,53 +5,26 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <iostream>
 
-// struct Object {
-//     size_t refcount;
-// };
-
-// struct Node {
-//     enum class Type : char {
-//         BinaryExpression
-//     } nodetype;
-
-//     virtual Object interpret();
-// };
-
-// struct Variable {
-//     enum class Type : char {
-//         Int8, 
-//         Int16,
-//         Int32,
-//         Int64,
-//         Single,
-//         Double
-//     } variabletype;
-//     bool is_signed = false;
-
-//     int scope;
-//     std::string name;
-// };
-
-// extern std::unordered_map<std::string, Variable> variable_pool {};
-
-// struct BinaryExpression: public Node {
-//     std::string op;
-//     struct Node *right = nullptr, *left = nullptr;
-
-//     Object interpret() override {
-
-//     }
-// };
-
-// enum class BranchType : char {
-//     Expression,
-// };
+/**
+ * UNARY OPERATORS:
+ * ~, -, !, +, @, $
+ *
+ * BINARY OPERATORS:
+ * Highest precedence: ^
+ * then: * /
+ * then: + - & |
+ * then: < > >= <=
+ * and lastly: && ||
+ */
 
 struct Statement {
     enum class Type {
         BinaryExpr,
-        Ident
+        Ident,
+        Variable,
+        FunctionCall,
     } type;
 };
 
@@ -66,6 +39,7 @@ struct ValueNode {
 struct BinaryExpression : public Statement {
     std::unique_ptr<AST> left, right;
     std::string op;
+    bool user_defined;
 };
 
 struct Variable : public Statement {
@@ -74,4 +48,18 @@ struct Variable : public Statement {
     ValueNode value;
 };
 
+struct FunctionCall : public Statement {
+    std::string function_name;
+    std::vector<ValueNode*> arguments;
+};
+
+class Parser {
+    Lexer lexer;
+    public:
+    Parser(std::string& input);
+    Parser(const Lexer lexer);
+    void parse_next();
+    private:
+    BinaryExpression parse_expression();
+};
 #endif
