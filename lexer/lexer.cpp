@@ -1,5 +1,31 @@
 #include "lexer.hpp"
 
+static inline bool is_operator(const char c) {
+    switch (c) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '(':
+    case ')':
+    case '[':
+    case ']':
+    case '{':
+    case '}':
+    case '@':
+    case '~':
+    case '&':
+    case '|':
+    case '^':
+    case '=':
+    case '!':
+    case '.':
+        return true;
+    }
+    return false;
+}
+
+/* Public */
 Lexer::Lexer(std::string &input) : input(input), buffer_size(input.size()) {}
 
 Token Lexer::next() {
@@ -42,26 +68,6 @@ Token Lexer::next() {
             ++cursor;
         }
         return next();
-    case '+':
-    case '-':
-    case '*':
-    case '/':
-    case '(':
-    case ')':
-    case '[':
-    case ']':
-    case '{':
-    case '}':
-    case '@':
-    case '~':
-    case '&':
-    case '|':
-    case '^':
-    case '!':
-    case '.':
-        ++cursor;
-        return Token{std::string{input[cursor - 1]}, line, cursor,
-                     Token::Type::Operator};
     case ';':
         ++cursor;
         return Token{";", line, cursor, Token::Type::EndOfInstruction};
@@ -103,7 +109,16 @@ Token Lexer::next() {
             return Token{lexeme, line, cursor, Token::Type::Else};
         if (lexeme == "function")
             return Token{lexeme, line, cursor, Token::Type::Function};
+        if (lexeme == "infix")
+            return Token{lexeme,line,cursor,Token::Type::OperatorDefinition};
         return Token{lexeme, line, cursor, Token::Type::Identifier};
+    }
+    if (is_operator(input[cursor])) {
+        while (has_next() && is_operator(input[cursor])) {
+            lexeme += input[cursor];
+            ++cursor;
+        }
+        return Token {lexeme, line, cursor, Token::Type::Operator};
     }
     if (isdigit(input[cursor])) {
         while (has_next() && isdigit(input[cursor])) {
@@ -130,4 +145,7 @@ std::vector<Token> Lexer::get_all_tokens() {
     return out;
 }
 
+void Lexer::rewind_token(const Token tok) { cursor -= tok.lexeme.size(); }
+
+/* Private */
 bool Lexer::has_next() const noexcept { return cursor < buffer_size; }

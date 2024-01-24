@@ -29,8 +29,8 @@ TEST_CASE("Lexer divides correctly", "[lexer]") {
     }
 }
 
-TEST_CASE ("Parser works correctly", "[parser]") {
-    SECTION ("Statement") {
+TEST_CASE ("Ast structure is all correct", "[AST]") {
+    SECTION ("AST test") {
         AST ast;
         BinaryExpression bin;
         bin.type = Statement::Type::BinaryExpr;

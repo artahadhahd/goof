@@ -18,6 +18,7 @@ struct Token {
         Floating,
         String,
         EndOfInstruction,
+        OperatorDefinition,
 
         // keywords
         If,
@@ -40,6 +41,8 @@ class Lexer {
     Token next();
     /// @brief strictly consume all tokens
     std::vector<Token> get_all_tokens();
+    /// @brief travel back one token
+    void rewind_token(const Token);
 
   private:
     bool has_next() const noexcept;
