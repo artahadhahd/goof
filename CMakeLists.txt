@@ -6,7 +6,10 @@ add_executable(goof ${sources})
 
 include_directories(lexer)
 target_sources(goof PUBLIC
-    ${PROJECT_SOURCE_DIR}/main.cpp ${PROJECT_SOURCE_DIR}/lexer/lexer.cpp
+    ${PROJECT_SOURCE_DIR}/main.cpp
+    ${PROJECT_SOURCE_DIR}/lexer/lexer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/parser.cpp
+    ${PROJECT_SOURCE_DIR}/logging/logging.cpp
     PUBLIC
     FILE_SET HEADERS
     BASE_DIRS ${PROJECT_SOURCE_DIR}

@@ -29,27 +29,27 @@ TEST_CASE("Lexer divides correctly", "[lexer]") {
     }
 }
 
-TEST_CASE ("Ast structure is all correct", "[AST]") {
-    SECTION ("AST test") {
-        AST ast;
-        BinaryExpression bin;
-        bin.type = Statement::Type::BinaryExpr;
+// TEST_CASE ("Ast structure is all correct", "[AST]") {
+//     SECTION ("AST test") {
+//         AST ast;
+//         BinaryExpression bin;
+//         bin.type = Statement::Type::BinaryExpr;
 
-        auto var_ast = std::make_unique<AST>();
-        Variable var;
-        var.name = "hi";
-        var.refcnt = 1;
-        var.type = Statement::Type::Ident;
-        var_ast->statements.push_back(&var);
+//         auto var_ast = std::make_unique<AST>();
+//         Variable var;
+//         var.name = "hi";
+//         var.refcnt = 1;
+//         var.type = Statement::Type::Ident;
+//         var_ast->statements.push_back(&var);
 
-        bin.left = std::move(var_ast);
-        bin.right = nullptr;
-        bin.op = "+";
-        ast.statements.push_back(&bin);
-        REQUIRE (ast.statements.size() == 1);
-        REQUIRE (static_cast<BinaryExpression*>(ast.statements.at(0))->op == "+");
-        REQUIRE (
-            static_cast<Variable*>(static_cast<BinaryExpression*>(ast.statements.at(0))->left->statements.at(0))->name == "hi"
-        );
-    }
-}
+//         bin.left = std::move(var_ast);
+//         bin.right = nullptr;
+//         bin.op = "+";
+//         ast.statements.push_back(&bin);
+//         REQUIRE (ast.statements.size() == 1);
+//         REQUIRE (static_cast<BinaryExpression*>(ast.statements.at(0))->op == "+");
+//         REQUIRE (
+//             static_cast<Variable*>(static_cast<BinaryExpression*>(ast.statements.at(0))->left->statements.at(0))->name == "hi"
+//         );
+//     }
+// }

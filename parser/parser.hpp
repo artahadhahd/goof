@@ -1,11 +1,15 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 #include "../lexer/lexer.hpp"
+#include "../logging/logging.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <cstdint>
+
+extern std::unordered_map<std::string, std::uint8_t> operator_precedences;
 
 /**
  * UNARY OPERATORS:
@@ -21,10 +25,14 @@
 
 struct Statement {
     enum class Type {
+        Unexpected,
+        Value,
         BinaryExpr,
         Ident,
         Variable,
         FunctionCall,
+        Number,
+        Float
     } type;
 };
 
@@ -32,12 +40,21 @@ struct AST {
     std::vector<Statement*> statements;
 };
 
-struct ValueNode {
+struct ValueNode : public Statement {
+    ValueNode(Token v, Statement::Type t) : value(v) {
+        this->type = t;
+    }
     Token value;
 };
 
 struct BinaryExpression : public Statement {
-    std::unique_ptr<AST> left, right;
+    BinaryExpression(Statement::Type t, std::shared_ptr<Statement> l, std::shared_ptr<Statement> r, std::string op, bool u) {
+        type = t;
+        left = l;
+        right = r;
+        user_defined = u;
+    }
+    std::shared_ptr<Statement> left, right;
     std::string op;
     bool user_defined;
 };
@@ -54,12 +71,17 @@ struct FunctionCall : public Statement {
 };
 
 class Parser {
-    Lexer lexer;
+    Lexer& lexer;
     public:
-    Parser(std::string& input);
-    Parser(const Lexer lexer);
+    Parser(const std::string input);
+    Parser(Lexer& lexer);
     void parse_next();
     private:
-    BinaryExpression parse_expression();
+    std::shared_ptr<Statement> parse_expression(int);
+    // BinaryExpression parse_exp(int);
+    std::shared_ptr<Statement> factor_token();
+    protected:
+    friend class Logger;
+    Logger logger;
 };
 #endif
